@@ -49,15 +49,16 @@ namespace ChineseSchool.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InteriorResponse>> UpdateUserTask([FromBody] InteriorsRequest request)
+        public async Task<ActionResult<InteriorResponse>> UpdateInterior(long id, [FromBody] InteriorsRequest request)
         {
             try
             {
                 var interiorDto = await _interiorService.UpdateInterior(new UpdateInteriorModel
                 {
+                    Id=id,
                     Name = request.Name,
                     Description = request.Description,
                     ImageInterior = request.ImageInterior,

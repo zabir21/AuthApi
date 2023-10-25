@@ -9,9 +9,9 @@ namespace ChineseSchool.Service
 {
     public class InteriorService : IInteriorService
     {
-        private readonly InteriorDbContext _context;
+        private readonly AppDbContext _context;
 
-        public InteriorService(InteriorDbContext context) 
+        public InteriorService(AppDbContext context) 
         {
             _context = context;
         }
@@ -48,7 +48,7 @@ namespace ChineseSchool.Service
 
             if (interior == null)
             {
-                throw new Exception("Интерьер не найден");
+                throw new Exception();
             }
 
             return new InteriorsDto
@@ -66,7 +66,7 @@ namespace ChineseSchool.Service
 
             if (interior == null)
             {
-                throw new Exception("Интерьер не найден");
+                throw new Exception();
             }
 
             _context.Interiors.Remove(interior);
@@ -79,7 +79,7 @@ namespace ChineseSchool.Service
 
             if (interior == null)
             {
-                throw new Exception("Интерьер не найден");
+                throw new Exception();
             }
 
             interior.Name = model.Name ?? interior.Name;
