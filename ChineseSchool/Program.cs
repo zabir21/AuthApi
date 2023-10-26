@@ -1,7 +1,9 @@
 using ChineseSchool.DataBase;
+using ChineseSchool.Mapper;
+using ChineseSchool.Middlewares;
 using ChineseSchool.Models;
-using ChineseSchool.Service;
-using ChineseSchool.Service.Interface;
+using ChineseSchool.Repository;
+using ChineseSchool.Repository.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -70,7 +72,8 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddAuthorization();
 
-builder.Services.AddScoped<IInteriorService, InteriorService>();
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddScoped<IInteriorRepository, InteriorRepository>();
 
 var app = builder.Build();
 
@@ -80,6 +83,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

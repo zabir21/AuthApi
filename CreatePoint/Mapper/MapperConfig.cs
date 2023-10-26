@@ -27,12 +27,6 @@ namespace CreatePoint.Mapper
 
             // модель Dto в модель ответа
             CreateMap<PointsDto, PointsResponse>().ReverseMap();
-
-            // модель запроса в модель ответа
-            CreateMap<PointsRequest, PointsResponse>().ReverseMap();
-
-            // модель запроса в модель запроса обновление запроса
-            CreateMap<PointsRequest, PointsRequest>().ReverseMap(); 
         }
     }
 }

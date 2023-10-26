@@ -1,6 +1,7 @@
-﻿using ChineseSchool.Dto.Request;
+﻿using AutoMapper;
+using ChineseSchool.Dto.Request;
 using ChineseSchool.Dto.Response;
-using ChineseSchool.Service.Interface;
+using ChineseSchool.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,18 +12,20 @@ namespace ChineseSchool.Controllers
     [Authorize]
     public class InteriorController : ControllerBase
     {
-        private readonly IInteriorService _interiorService;
+        private readonly IInteriorRepository _interiorRep;
+        private readonly IMapper _mapper;
 
-        public InteriorController(IInteriorService interiorService)
+        public InteriorController(IInteriorRepository interiorRep, IMapper mapper)
         {
-            _interiorService = interiorService;
+            _interiorRep = interiorRep;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<InteriorResponse>>> GetAllInterior()
         {
-            var interiorAll = await _interiorService.GetAllInterior();
+            var interiorAll = await _interiorRep.GetAllInterior();
             return Ok(interiorAll);
         }
 
@@ -31,88 +34,45 @@ namespace ChineseSchool.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<InteriorResponse>> GetInteriorById(long id)
         {
-            try
-            {
-                var interior = await _interiorService.GetByIdInterior(id);
+            var interior = await _interiorRep.GetByIdInterior(id);
 
-                return Ok(new InteriorResponse
-                {
-                    Id = interior.Id,
-                    Name = interior.Name,
-                    Description = interior.Description,
-                    ImageInterior = interior.ImageInterior,
-                });
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var response = _mapper.Map<InteriorResponse>(interior);
+            return Ok(response);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InteriorResponse>> UpdateInterior(long id, [FromBody] InteriorsRequest request)
+        public async Task<ActionResult<InteriorResponse>> UpdateInterior([FromBody] UpdateInteriorRequest request)
         {
-            try
-            {
-                var interiorDto = await _interiorService.UpdateInterior(new UpdateInteriorModel
-                {
-                    Id=id,
-                    Name = request.Name,
-                    Description = request.Description,
-                    ImageInterior = request.ImageInterior,
-                });
+            var dto = _mapper.Map<UpdateInteriorDto>(request);
 
-                return Ok(new InteriorResponse
-                {
-                    Id = interiorDto.Id,
-                    Name = interiorDto.Name,
-                    Description = interiorDto.Description,
-                    ImageInterior= interiorDto.ImageInterior
-                });
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var interior  = await _interiorRep.UpdateInterior(dto);
+
+            var response = _mapper.Map<InteriorResponse>(interior);
+
+            return Ok(response);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<InteriorResponse>> PostInterior([FromBody] InteriorsRequest request)
         {
-            var interior = await _interiorService.CreateInterior(new InteriorsRequest
-            {
-                Name = request.Name,
-                Description = request.Description,
-                ImageInterior = request.ImageInterior,
-            });
+            var interior = await _interiorRep.CreateInterior(_mapper.Map<InteriorsRequest>(request));
 
-            return CreatedAtAction(nameof(GetAllInterior), new InteriorResponse
-            {
-                Id = interior.Id,
-                Name = interior.Name,
-                Description = interior.Description,
-                ImageInterior = interior.ImageInterior,
-            });
+            var response = _mapper.Map<InteriorResponse>(interior);
+
+            return CreatedAtAction(nameof(GetAllInterior), response);
         }
 
         [HttpDelete("{id}")]     
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteInterior([FromRoute] long id)
+        public async Task<IActionResult> DeleteInterior(long id)
         {
-            try
-            {
-                await _interiorService.DeleteByIdInterior(id);
+            await _interiorRep.DeleteByIdInterior(id);
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return Ok();
         }
     }
 }

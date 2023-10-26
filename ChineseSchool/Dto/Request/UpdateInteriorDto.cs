@@ -1,6 +1,6 @@
 ﻿namespace ChineseSchool.Dto.Request
 {
-    public class UpdateInteriorModel
+    public class UpdateInteriorDto
     {
         public long Id { get; set; }
         public string Name { get; set; }

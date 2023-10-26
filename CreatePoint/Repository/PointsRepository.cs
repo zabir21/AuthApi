@@ -4,6 +4,7 @@ using CreatePoint.Dto;
 using CreatePoint.Dto.Request;
 using CreatePoint.Models;
 using CreatePoint.Repository.IRepository;
+using CreatePoint.Utility.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreatePoint.Repository
@@ -23,7 +24,7 @@ namespace CreatePoint.Repository
         {
             var point = _mapper.Map<Points>(request);
 
-            await _db.Points.AddAsync(point);
+            _db.Points.Add(point);
             await _db.SaveChangesAsync();
 
             var dto = _mapper.Map<PointsDto>(point);
@@ -41,9 +42,7 @@ namespace CreatePoint.Repository
             var point = await _db.Points.FindAsync(id);
 
             if (point == null)
-            {
-                throw new Exception();
-            }
+                throw new NotFoundApiException();
 
             var dto = _mapper.Map<PointsDto>(point);
             return dto;
@@ -54,30 +53,23 @@ namespace CreatePoint.Repository
             var point = await _db.Points.FindAsync(id);
 
             if (point == null)
-            {
-                throw new Exception();
-            }
+                throw new NotFoundApiException();
 
             _db.Points.Remove(point);
             await _db.SaveChangesAsync();
         }
 
-        public async Task<PointsDto> UpdatePoint(UpdatePoints model)
+        public async Task UpdatePoint(UpdatePoints model)
         {
             var point = await _db.Points.FindAsync(model.Id);
 
             if (point == null)
-            {
-                throw new Exception();
-            }
+                throw new NotFoundApiException();
 
             point.UserName = model.UserName ?? point.UserName;
             point.QuantityPoint = model.QuantityPoint;
 
             await _db.SaveChangesAsync();
-
-            var dto = _mapper.Map<PointsDto>(point);
-            return dto;
         }
     }
 }

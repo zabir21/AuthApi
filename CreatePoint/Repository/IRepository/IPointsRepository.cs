@@ -9,7 +9,7 @@ namespace CreatePoint.Repository.IRepository
         Task<PointsDto> CreatePoints(PointsRequest request);
         Task<List<Points>> GetAllPoints();
         Task DeleteByIdPoints(long id);
-        Task<PointsDto> UpdatePoint(UpdatePoints model);
+        Task UpdatePoint(UpdatePoints model);
         Task<PointsDto> GetByIdPoint(long id);
     }
 }

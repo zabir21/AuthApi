@@ -1,5 +1,6 @@
 using CreatePoint.Data;
 using CreatePoint.Mapper;
+using CreatePoint.Middlewares;
 using CreatePoint.Repository;
 using CreatePoint.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
