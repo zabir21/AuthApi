@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using CreatePoint.Data;
 using CreatePoint.Dto;
 using CreatePoint.Dto.Request;
@@ -20,31 +21,31 @@ namespace CreatePoint.Repository
             _mapper = mapper;
         }
 
-        public async Task<PointsDto> CreatePoints(PointsRequest request)
+        public async Task<PointsDtoPost> CreatePoints(PointsRequest request)
         {
             var point = _mapper.Map<Points>(request);
 
             _db.Points.Add(point);
             await _db.SaveChangesAsync();
 
-            var dto = _mapper.Map<PointsDto>(point);
+            var dto = _mapper.Map<PointsDtoPost>(point);
 
             return dto;
         }
 
-        public async Task<List<Points>> GetAllPoints()
+        public async Task<IEnumerable<Points>> GetAllPoints()
         {
-            return await _db.Points.ToListAsync();
+            return await _db.Points.ToArrayAsync();
         }
 
-        public async Task<PointsDto> GetByIdPoint(long id)
+        public async Task<PointsDtoGetById> GetByIdPoint(long id)
         {
             var point = await _db.Points.FindAsync(id);
 
             if (point == null)
                 throw new NotFoundApiException();
 
-            var dto = _mapper.Map<PointsDto>(point);
+            var dto = _mapper.Map<PointsDtoGetById>(point);
             return dto;
         }
 
@@ -66,8 +67,7 @@ namespace CreatePoint.Repository
             if (point == null)
                 throw new NotFoundApiException();
 
-            point.UserName = model.UserName ?? point.UserName;
-            point.QuantityPoint = model.QuantityPoint;
+            _mapper.Map(model, point);            
 
             await _db.SaveChangesAsync();
         }

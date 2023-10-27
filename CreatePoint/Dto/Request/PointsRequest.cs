@@ -3,6 +3,6 @@
     public class PointsRequest
     {
         public decimal QuantityPoint { get; set; }
-        public string? UserName { get; set; }
+        public string UserName { get; set; }
     }
 }

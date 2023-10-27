@@ -6,10 +6,10 @@ namespace ChineseSchool.Repository.Interface
 {
     public interface IInteriorRepository
     {
-        Task<InteriorsDto> CreateInterior(InteriorsRequest request);
-        Task<List<Interiors>> GetAllInterior();
-        Task<InteriorsDto> GetByIdInterior(long id);
-        Task<InteriorsDto> UpdateInterior(UpdateInteriorDto model);
+        Task<InteriorsDtoPost> CreateInterior(InteriorsRequest request);
+        Task<IEnumerable<Interiors>> GetAllInterior();
+        Task<InteriorsDtoGetById> GetByIdInterior(long id);
+        Task UpdateInterior(UpdateInteriorDto model);
         Task DeleteByIdInterior(long id);
     }
 }

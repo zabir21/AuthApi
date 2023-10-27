@@ -6,10 +6,10 @@ namespace CreatePoint.Repository.IRepository
 {
     public interface IPointsRepository
     {
-        Task<PointsDto> CreatePoints(PointsRequest request);
-        Task<List<Points>> GetAllPoints();
+        Task<PointsDtoPost> CreatePoints(PointsRequest request);
+        Task<IEnumerable<Points>> GetAllPoints();
         Task DeleteByIdPoints(long id);
         Task UpdatePoint(UpdatePoints model);
-        Task<PointsDto> GetByIdPoint(long id);
+        Task<PointsDtoGetById> GetByIdPoint(long id);
     }
 }

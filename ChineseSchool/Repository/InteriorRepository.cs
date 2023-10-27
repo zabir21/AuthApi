@@ -20,31 +20,32 @@ namespace ChineseSchool.Repository
             _mapper = mapper;
         }
 
-        public async Task<InteriorsDto> CreateInterior(InteriorsRequest request)
+        public async Task<InteriorsDtoPost> CreateInterior(InteriorsRequest request)
         {
             var interior = _mapper.Map<Interiors>(request);
 
             _context.Interiors.Add(interior);
             await _context.SaveChangesAsync();
 
-            var dto = _mapper.Map<InteriorsDto>(interior);
+            var dto = _mapper.Map<InteriorsDtoPost>(interior);
             return dto;
         }
 
-        public async Task<List<Interiors>> GetAllInterior()
+        public async Task<IEnumerable<Interiors>> GetAllInterior()
         {
-           return await _context.Interiors.ToListAsync();          
+           return await _context.Interiors.ToArrayAsync();          
         }
 
-        public async Task<InteriorsDto> GetByIdInterior(long id)
+        public async Task<InteriorsDtoGetById> GetByIdInterior(long id)
         {
             var interior = await _context.Interiors.FindAsync(id);
 
             if (interior == null)
                 throw new NotFoundException();
 
-            var dto = _mapper.Map<InteriorsDto>(interior);
+            var dto = _mapper.Map<InteriorsDtoGetById>(interior);
             return dto;
+            
         }
 
         public async Task DeleteByIdInterior(long id)
@@ -58,21 +59,16 @@ namespace ChineseSchool.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<InteriorsDto> UpdateInterior(UpdateInteriorDto model)
+        public async Task UpdateInterior(UpdateInteriorDto dto)
         {
-            var interior = await _context.Interiors.FindAsync(model.Id);
+            var interior = await _context.Interiors.FindAsync(dto.Id);
 
             if (interior == null)
                 throw new NotFoundException();
 
-            interior.Name = model.Name ?? interior.Name;
-            interior.Description = model.Description ?? interior.Description;
-            interior.ImageInterior = model.ImageInterior ?? interior.ImageInterior;
+            _mapper.Map(dto, interior);
 
             await _context.SaveChangesAsync();
-
-            var dto = _mapper.Map<InteriorsDto>(interior);
-            return dto;
         }
     }
 }

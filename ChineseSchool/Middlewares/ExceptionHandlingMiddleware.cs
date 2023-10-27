@@ -1,4 +1,5 @@
 ﻿using ChineseSchool.Exceptions;
+using System.Net;
 
 namespace ChineseSchool.Middlewares
 {
@@ -22,7 +23,7 @@ namespace ChineseSchool.Middlewares
             {
                 context.Response.StatusCode = ex.StatusCode;
                 await context.Response.WriteAsJsonAsync(ex.Message);
-            }
+            }           
         }
     }
 }

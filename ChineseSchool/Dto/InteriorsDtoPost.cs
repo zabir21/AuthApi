@@ -1,6 +1,6 @@
 ﻿namespace ChineseSchool.Dto
 {
-    public class InteriorsDto
+    public class InteriorsDtoPost
     {
         public long Id { get; set; }
         public string Name { get; set; }

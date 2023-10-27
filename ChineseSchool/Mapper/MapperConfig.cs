@@ -12,15 +12,19 @@ namespace ChineseSchool.Mapper
         {
             CreateMap<InteriorsRequest, Interiors>().ReverseMap();
 
-            CreateMap<Interiors, InteriorsDto>().ReverseMap();
+            CreateMap<Interiors, InteriorsDtoPost>().ReverseMap();
 
-            CreateMap<InteriorsRequest, InteriorsDto>().ReverseMap();
+            CreateMap<Interiors, InteriorsDtoGetById>().ReverseMap();
 
-            CreateMap<InteriorsDto, InteriorResponse>().ReverseMap();
+            CreateMap<UpdateInteriorDto, Interiors? > ().ReverseMap();
 
             CreateMap<UpdateInteriorRequest, UpdateInteriorDto>().ReverseMap();
 
-            CreateMap<UpdateInteriorDto, InteriorResponse>().ReverseMap();
+            CreateMap<InteriorsRequest, InteriorsDtoPost>().ReverseMap();
+
+            CreateMap<InteriorsDtoPost, InteriorResponse>().ReverseMap();
+
+            CreateMap<InteriorsDtoGetById, InteriorResponse>().ReverseMap();
         }
     }
 }

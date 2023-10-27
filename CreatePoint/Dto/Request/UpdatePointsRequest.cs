@@ -1,6 +1,6 @@
-﻿namespace CreatePoint.Dto
+﻿namespace CreatePoint.Dto.Request
 {
-    public class PointsDto
+    public class UpdatePointsRequest
     {
         public long Id { get; set; }
         public decimal QuantityPoint { get; set; }

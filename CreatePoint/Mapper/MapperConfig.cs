@@ -10,23 +10,21 @@ namespace CreatePoint.Mapper
     {
         public MapperConfig() 
         {
-            //Модель запроса в модель 
             CreateMap<PointsRequest, Points>().ReverseMap();
 
-            // Модели в Dto
-            CreateMap<Points, PointsDto>().ReverseMap();
+            CreateMap<Points, PointsDtoPost>().ReverseMap();
 
-            // модель обновления в Dto
-            CreateMap<UpdatePoints, PointsDto>().ReverseMap();
+            CreateMap<Points, PointsDtoGetById>().ReverseMap();
 
-            // модель запроса в модель обновления
-            CreateMap<PointsRequest, UpdatePoints>().ReverseMap();
+            CreateMap<PointsDtoGetById, PointsResponse>().ReverseMap();
 
-            // модель обновления в модель ответа
-            CreateMap<UpdatePoints, PointsResponse>().ReverseMap();
+            CreateMap<UpdatePointsRequest, UpdatePoints>().ReverseMap();
 
-            // модель Dto в модель ответа
-            CreateMap<PointsDto, PointsResponse>().ReverseMap();
+            CreateMap<UpdatePoints, Points>().ReverseMap();
+
+            CreateMap<PointsRequest, PointsDtoPost>().ReverseMap();
+
+            CreateMap<PointsDtoPost, PointsResponse>().ReverseMap();
         }
     }
 }

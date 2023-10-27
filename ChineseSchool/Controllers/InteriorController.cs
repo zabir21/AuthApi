@@ -9,7 +9,7 @@ namespace ChineseSchool.Controllers
 {
     [Route("api/interior")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class InteriorController : ControllerBase
     {
         private readonly IInteriorRepository _interiorRep;
@@ -23,7 +23,7 @@ namespace ChineseSchool.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InteriorResponse>>> GetAllInterior()
+        public async Task<IActionResult> GetAllInterior()
         {
             var interiorAll = await _interiorRep.GetAllInterior();
             return Ok(interiorAll);
@@ -31,8 +31,7 @@ namespace ChineseSchool.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InteriorResponse>> GetInteriorById(long id)
+        public async Task<IActionResult> GetInteriorById(long id)
         {
             var interior = await _interiorRep.GetByIdInterior(id);
 
@@ -42,23 +41,20 @@ namespace ChineseSchool.Controllers
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InteriorResponse>> UpdateInterior([FromBody] UpdateInteriorRequest request)
+        public async Task<IActionResult> UpdateInterior([FromBody] UpdateInteriorRequest request)
         {
             var dto = _mapper.Map<UpdateInteriorDto>(request);
 
-            var interior  = await _interiorRep.UpdateInterior(dto);
+            await _interiorRep.UpdateInterior(dto);
 
-            var response = _mapper.Map<InteriorResponse>(interior);
-
-            return Ok(response);
+            return Ok();
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<InteriorResponse>> PostInterior([FromBody] InteriorsRequest request)
+        public async Task<IActionResult> PostInterior([FromBody] InteriorsRequest request)
         {
-            var interior = await _interiorRep.CreateInterior(_mapper.Map<InteriorsRequest>(request));
+            var interior = await _interiorRep.CreateInterior(request);
 
             var response = _mapper.Map<InteriorResponse>(interior);
 
@@ -67,7 +63,6 @@ namespace ChineseSchool.Controllers
 
         [HttpDelete("{id}")]     
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteInterior(long id)
         {
             await _interiorRep.DeleteByIdInterior(id);
